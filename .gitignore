@@ -1,0 +1,41 @@
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Python cache / build artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+build/
+dist/
+*.egg-info/
+.eggs/
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+.coverage
+coverage.xml
+
+# Tooling / IDE metadata
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs / reports
+*.log
+logs/
+
+# Generated data / indexes
+indexes/
+data/*.docx
+data/*.pdf
+data/*.jsonl
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*.swo
+~$*
