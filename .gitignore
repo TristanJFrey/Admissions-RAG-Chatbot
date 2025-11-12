@@ -29,9 +29,6 @@ logs/
 
 # Generated data / indexes
 indexes/
-data/*.docx
-data/*.pdf
-data/*.jsonl
 
 # Temporary files
 *.tmp
