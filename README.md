@@ -29,3 +29,19 @@ Example:
 ```powershell
 python src/query_faiss.py --index indexes/faiss_admissions --q "When is the undergrad application deadline?" --k 5
 ```
+
+## 4. Query the corpus using BM25
+
+Current implementation only handles a single document.
+
+General form:
+
+```powershell
+python src/query_bm25.py --doc <path_to_input_document> --q "<your question>" --k <top_k_results>
+```
+
+Example:
+
+```powershell
+python src/query_bm25.py --doc data/admissions.docx --q "When is the undergrad application deadline?" --k 5
+```
