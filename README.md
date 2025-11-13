@@ -45,3 +45,19 @@ Example:
 ```powershell
 python src/query_bm25.py --doc data/admissions.docx --q "When is the undergrad application deadline?" --k 5
 ```
+
+## 5. Hybrid search with Reciprocal Rank Fusion (RRF)
+
+Run FAISS (dense) and BM25 (lexical) together, then fuse the rankings so highly ranked chunks from either retriever bubble up.
+
+General form:
+
+```powershell
+python src/query_hybrid_rrf.py --index <path_to_faiss_index> --doc <path_to_input_document> --q "<your question>" --k <final_results> --faiss_k <faiss_hits> --bm25_k <bm25_hits>
+```
+
+Example:
+
+```powershell
+python src/query_hybrid_rrf.py --index indexes/faiss_admissions --doc data/admissions.docx --q "When is the undergrad application deadline?" --k 5 --faiss_k 10 --bm25_k 10
+```
