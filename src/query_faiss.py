@@ -26,14 +26,15 @@ def main():
     # Load the persisted FAISS index (vectors + metadata stored on disk).
     vs = FAISS.load_local(args.index, embeddings, allow_dangerous_deserialization=True)
     # Perform similarity search to retrieve the closest chunks to the query.
-    results = vs.similarity_search(args.q, k=args.k)
+    results = vs.similarity_search_with_score(args.q, k=args.k)
 
-    for rank, d in enumerate(results, start=1):
-        meta = d.metadata
+    for rank, (doc, score) in enumerate(results, start=1):
+        meta = doc.metadata
         print(f"\n=== Result #{rank} ===")
         print(f"source   : {meta.get('source')}")
         print(f"chunk_id : {meta.get('chunk_id')}")
-        print(f"text     : {_preview_text(d.page_content.strip())}")
+        print(f"score    : {score:.4f}")
+        print(f"text     : {_preview_text(doc.page_content.strip())}")
         #print(f"text     : {_preview_text(d.page_content[:500].strip())}...") # makes it shorter
 
 
