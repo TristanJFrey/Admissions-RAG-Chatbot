@@ -7,3 +7,4 @@ faiss-cpu
 docx2txt
 python-dotenv
 python-docx
+rank_bm25
