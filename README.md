@@ -61,3 +61,14 @@ Example:
 ```powershell
 python src/query_hybrid_rrf.py --index indexes/faiss_admissions --doc data/admissions.docx --q "When is the undergrad application deadline?" --k 5 --faiss_k 10 --bm25_k 10
 ```
+
+## 6. Evaluate FAISS vs Hybrid RRF
+
+Count how many sample questions are answered with the correct chunk by FAISS-only retrieval versus the hybrid RRF pipeline.
+
+```powershell
+python src/eval_retrievers.py --index indexes/faiss_admissions --doc data/admissions.docx --questions data/sample_questions.json --show_details --report_k 3
+```
+
+`--show_details` prints the gold chunk id along with the top chunk for each retriever so you can inspect misses.
+Use `--report_k` to control how many ranks you want to track (top-1/2/3 accuracy by default).
