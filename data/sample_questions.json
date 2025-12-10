@@ -3,52 +3,62 @@
     {
       "id": 1,
       "question": "When is the deadline for first years applicants at Miami University?",
-      "chunk_id": "admissions.docx-0-chunk-00002"
+      "chunk_id": "admissions.md-5-chunk-00005",
+      "answer": "The priority deadline for first-year applications is Dec. 1."
     },
     {
       "id": 2,
       "question": "What are the requirements to apply for graduate admission?",
-      "chunk_id": "admissions.docx-0-chunk-00006"
+      "chunk_id": "admissions.md-9-chunk-00009",
+      "answer": "Graduate admission requires a bachelor's degree from an accredited institution, admission through the Graduate School, and any program-specific materials (some programs require tests, portfolios, CV, recommendations)."
     },
     {
       "id": 3,
       "question": "What are the requirements to apply for transfer undergraduate admission?",
-      "chunk_id": "admissions.docx-0-chunk-00004"
+      "chunk_id": "admissions.md-6-chunk-00006",
+      "answer": "Good academic standing; HS diploma required; 2.0+ college GPA generally expected (programs may vary)"
     },
     {
       "id": 4,
       "question": "Do first-year applicants need recommendation letters?",
-      "chunk_id": "admissions.docx-0-chunk-00001"
+      "chunk_id": "admissions.md-3-chunk-00003",
+      "answer": "Yes. At least one counselor or academic teacher recommendation is required for first-year applicants."
     },
     {
       "id": 5,
       "question": "What is the spring semester application deadline for undergraduates?",
-      "chunk_id": "admissions.docx-0-chunk-00002"
+      "chunk_id": "admissions.md-5-chunk-00005",
+      "answer": "The spring semester undergraduate application deadline is Dec. 1 (rolling decisions, deadline to accept Jan. 10)."
     },
     {
       "id": 6,
       "question": "Is there a separate application for international undergraduate students?",
-      "chunk_id": "admissions.docx-0-chunk-00005"
+      "chunk_id": "admissions.md-8-chunk-00008",
+      "answer": "International undergraduates can apply via the Common Application and the Miami International Application (no essay)."
     },
     {
       "id": 7,
       "question": "What are the Early Decision and Early Action deadlines?",
-      "chunk_id": "admissions.docx-0-chunk-00002"
+      "chunk_id": "admissions.md-5-chunk-00005",
+      "answer": "Early Decision: apply by Nov. 1 (decision Dec. 1). Early Action I: apply by Nov. 1 (decision Dec. 15). Early Action II: apply by Dec. 1 (decision Feb. 1)."
     },
     {
       "id": 8,
       "question": "What application platforms can first-year students use?",
-      "chunk_id": "admissions.docx-0-chunk-00001"
+      "chunk_id": "admissions.md-3-chunk-00003",
+      "answer": "First-year students can apply via the Common Application and the Coalition Application (where available)."
     },
     {
       "id": 9,
       "question": "Is Miami University test-optional for first-year applicants?",
-      "chunk_id": "admissions.docx-0-chunk-00001"
+      "chunk_id": "admissions.md-3-chunk-00003",
+      "answer": "Yes. ACT/SAT is optional for Oxford first-year applicants through Spring 2026; superscoring is considered if scores are submitted."
     },
     {
       "id": 10,
       "question": "What materials do first-year applicants need to submit?",
-      "chunk_id": "admissions.docx-0-chunk-00001"
+      "chunk_id": "admissions.md-3-chunk-00003",
+      "answer": "Required/supporting materials: high school transcript (unofficial accepted at application), at least one counselor or academic teacher recommendation, and English proficiency for non-native English speakers."
     }
   ]
 }
