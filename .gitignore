@@ -29,6 +29,8 @@ logs/
 
 # Generated data / indexes
 indexes/
+chunks_txt/
+eval_report.txt
 
 # Temporary files
 *.tmp
@@ -36,3 +38,4 @@ indexes/
 *.swp
 *.swo
 ~$*
+eval_report.txt

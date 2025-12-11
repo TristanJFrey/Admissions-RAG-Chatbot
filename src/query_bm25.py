@@ -4,7 +4,7 @@ query_bm25.py
 Lexical (keyword-based) search over a DOCX or JSON document using BM25.
 
 Usage:
-    python src/query_bm25.py --doc data/admissions.docx --q "when is the undergrad admissions deadline?" --k 5
+    python src/query_bm25.py --doc data/admissions.md --q "when is the undergrad admissions deadline?" --k 5
 """
 
 import argparse

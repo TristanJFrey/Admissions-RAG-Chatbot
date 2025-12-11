@@ -8,7 +8,7 @@ chunk that contains the relevant policy text. Ground truth is derived by
 matching distinctive substrings inside the admissions document.
 
 Example:
-    python src/eval_retrievers.py --index indexes/faiss_admissions --doc data/admissions.docx --questions data/sample_questions.json
+    python src/eval_retrievers.py --index indexes/faiss_admissions --doc data/admissions.md --questions data/sample_questions.json
 """
 
 from __future__ import annotations
@@ -68,6 +68,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--embedding_model", default="sentence-transformers/all-MiniLM-L6-v2", help="Embedding model used when building the FAISS index")
     parser.add_argument("--show_details", action="store_true", help="Print per-question debug info")
     parser.add_argument("--report_k", type=int, default=3, help="Report hit rates up to this rank (e.g. 3 => top-1/2/3)")
+    parser.add_argument("--manifest", help="Optional chunk manifest JSON from ingestion (avoids re-splitting)")
     return parser
 
 
@@ -100,7 +101,7 @@ def evaluate(args) -> List[EvalRecord]:
         gold_chunk_id = entry["chunk_id"]
 
         faiss_hits = load_faiss_hits(args.index, question, args.embedding_model, faiss_fetch)
-        bm25_hits = load_bm25_hits(args.doc, question, args.bm25_k, args.chunk_size, args.chunk_overlap)
+        bm25_hits = load_bm25_hits(args.doc, question, args.bm25_k, args.chunk_size, args.chunk_overlap, manifest_path=args.manifest)
         fused = reciprocal_rank_fusion(faiss_hits, bm25_hits, args.rrf_k, final_k=rrf_fetch)
 
         faiss_top = faiss_hits[0][0].metadata.get("chunk_id") if faiss_hits else None
@@ -124,6 +125,9 @@ def evaluate(args) -> List[EvalRecord]:
 
 def main():
     args = build_arg_parser().parse_args()
+    if args.manifest is None:
+        candidate = os.path.join(args.index, "chunk_manifest.json")
+        args.manifest = candidate if os.path.exists(candidate) else None
     records = evaluate(args)
     total = len(records)
     faiss_correct = sum(1 for r in records if r.faiss_correct)

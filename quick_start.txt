@@ -1,0 +1,24 @@
+python -m venv .venv           # create virtual env once
+.\.venv\Scripts\Activate.ps1   # activate
+python -m pip install -r requirements.txt
+
+# Convert DOCX to Markdown (keeps tables/structure) if needed
+python scripts/convert_docx_to_md.py data/admissions.docx data/admissions.md
+
+# Ingest Markdown -> FAISS index + manifest + chunk text dumps
+python src/ingest_corpus.py --doc data/admissions.md --out indexes/faiss_admissions --chunk_size 1000 --chunk_overlap 150 --dump_chunks chunks_txt
+
+# Query FAISS (dense)
+python src/query_faiss.py --index indexes/faiss_admissions --q "When is the undergrad application deadline?" --k 5
+
+# Query BM25 (lexical) using manifest to align chunks
+python src/query_bm25.py --doc data/admissions.md --manifest indexes/faiss_admissions/chunk_manifest.json --q "When is the undergrad application deadline?" --k 5
+
+# Hybrid RRF (dense + lexical)
+python src/query_hybrid_rrf.py --index indexes/faiss_admissions --doc data/admissions.md --manifest indexes/faiss_admissions/chunk_manifest.json --q "When is the undergrad application deadline?" --k 5 --faiss_k 10 --bm25_k 10
+
+# Evaluate retrieval
+python src/eval_retrievers.py --index indexes/faiss_admissions --doc data/admissions.md --manifest indexes/faiss_admissions/chunk_manifest.json --questions data/sample_questions.json --show_details --report_k 3
+
+# Answer generation (RAG)
+python src/answer_hybrid_rag.py --index indexes/faiss_admissions --doc data/admissions.md --manifest indexes/faiss_admissions/chunk_manifest.json --q "When is the undergrad application deadline?" --k 3 --faiss_k 8 --bm25_k 8 --max_new_tokens 64
