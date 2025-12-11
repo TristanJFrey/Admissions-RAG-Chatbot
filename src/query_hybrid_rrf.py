@@ -1,14 +1,16 @@
 import argparse
+import json
 import os
 import re
 import sys
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Optional
 
 from langchain_community.document_loaders import Docx2txtLoader
 from langchain_community.vectorstores import FAISS
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
 from rank_bm25 import BM25Okapi
+from langchain_core.documents import Document
 
 RetrieverHit = Tuple[object, float]  # (Document, raw_score)
 
@@ -29,6 +31,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--chunk_size", type=int, default=1200, help="Chunk size for BM25 splitter (match ingestion)")
     parser.add_argument("--chunk_overlap", type=int, default=200, help="Chunk overlap for BM25 splitter (match ingestion)")
     parser.add_argument("--model", default="sentence-transformers/all-MiniLM-L6-v2", help="Embedding model for FAISS")
+    parser.add_argument("--manifest", help="Optional chunk manifest JSON from ingestion (avoids re-splitting)")
     return parser
 
 
@@ -44,32 +47,43 @@ def load_bm25_hits(
     top_k: int,
     chunk_size: int,
     chunk_overlap: int,
+    manifest_path: Optional[str] = None,
 ) -> List[RetrieverHit]:
-    if not os.path.exists(doc_path):
-        raise FileNotFoundError(f"Document not found: {doc_path}")
-
-    docs = Docx2txtLoader(doc_path).load()
-    for i, d in enumerate(docs):
-        d.metadata.update({"source": os.path.basename(doc_path), "doc_id": f"{os.path.basename(doc_path)}-{i}"})
-
-    splitter = RecursiveCharacterTextSplitter(
-        chunk_size=chunk_size,
-        chunk_overlap=chunk_overlap,
-        separators=["\n\n", "\n", " ", ""],
-    )
-    chunks = splitter.split_documents(docs)
-    texts: List[Tuple[object, str]] = []
+    chunks: List[Tuple[object, str]] = []
     tokenized_corpus: List[List[str]] = []
 
-    for idx, chunk in enumerate(chunks):
-        chunk.metadata["chunk_id"] = f"{chunk.metadata['doc_id']}-chunk-{idx:05d}"
-        text = chunk.page_content.strip()
-        if not text:
-            continue
-        texts.append((chunk, text))
-        tokenized_corpus.append(tokenize(text))
+    manifest_chunks = _load_chunks_from_manifest(manifest_path) if manifest_path else None
+    if manifest_chunks:
+        for entry in manifest_chunks:
+            text = entry.page_content.strip()
+            if not text:
+                continue
+            chunks.append((entry, text))
+            tokenized_corpus.append(tokenize(text))
+    else:
+        if not os.path.exists(doc_path):
+            raise FileNotFoundError(f"Document not found: {doc_path}")
 
-    if not texts:
+        docs = Docx2txtLoader(doc_path).load()
+        for i, d in enumerate(docs):
+            d.metadata.update({"source": os.path.basename(doc_path), "doc_id": f"{os.path.basename(doc_path)}-{i}"})
+
+        splitter = RecursiveCharacterTextSplitter(
+            chunk_size=chunk_size,
+            chunk_overlap=chunk_overlap,
+            separators=["\n\n", "\n", " ", ""],
+        )
+        split_chunks = splitter.split_documents(docs)
+
+        for idx, chunk in enumerate(split_chunks):
+            chunk.metadata["chunk_id"] = f"{chunk.metadata['doc_id']}-chunk-{idx:05d}"
+            text = chunk.page_content.strip()
+            if not text:
+                continue
+            chunks.append((chunk, text))
+            tokenized_corpus.append(tokenize(text))
+
+    if not chunks:
         return []
 
     bm25 = BM25Okapi(tokenized_corpus)
@@ -80,9 +94,32 @@ def load_bm25_hits(
 
     hits: List[RetrieverHit] = []
     for rank, idx in enumerate(ranked_indices, start=1):
-        chunk, _ = texts[idx]
+        chunk, _ = chunks[idx]
         hits.append((chunk, scores[idx]))
     return hits
+
+
+def _load_chunks_from_manifest(manifest_path: str) -> Optional[List[Document]]:
+    if not manifest_path or not os.path.exists(manifest_path):
+        return None
+    try:
+        with open(manifest_path, "r", encoding="utf-8") as f:
+            payload = json.load(f)
+        items = []
+        for entry in payload.get("chunks", []):
+            text = entry.get("text", "")
+            chunk_id = entry.get("chunk_id")
+            if not text or not chunk_id:
+                continue
+            meta = {
+                "chunk_id": chunk_id,
+                "doc_id": entry.get("doc_id"),
+                "source": entry.get("source"),
+            }
+            items.append(Document(page_content=text, metadata=meta))
+        return items
+    except Exception:
+        return None
 
 
 def reciprocal_rank_fusion(
@@ -119,8 +156,13 @@ def main():
     parser = build_arg_parser()
     args = parser.parse_args()
 
+    manifest_path = args.manifest
+    if not manifest_path:
+        candidate = os.path.join(args.index, "chunk_manifest.json")
+        manifest_path = candidate if os.path.exists(candidate) else None
+
     faiss_hits = load_faiss_hits(args.index, args.q, args.model, args.faiss_k)
-    bm25_hits = load_bm25_hits(args.doc, args.q, args.bm25_k, args.chunk_size, args.chunk_overlap)
+    bm25_hits = load_bm25_hits(args.doc, args.q, args.bm25_k, args.chunk_size, args.chunk_overlap, manifest_path=manifest_path)
     fused = reciprocal_rank_fusion(faiss_hits, bm25_hits, args.rrf_k, args.k)
 
     print(f"\n=== Hybrid RRF Results (top {len(fused)}) for: '{args.q}' ===")
