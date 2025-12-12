@@ -4,71 +4,71 @@
       "id": 1,
       "question": "When is the deadline for first years applicants at Miami University?",
       "chunk_id": "admissions.md-5-chunk-00005",
-      "answer": "The priority deadline for first-year applications is Dec. 1.",
-      "answer_short": "Dec. 1."
+      "answer": "For first-year applicants, Miami University uses several deadlines depending on the application type. Early Decision and Early Action I have a November 1 deadline, Early Action II is due December 1, and Regular Decision applications are due February 1. Spring admission also has a December 1 deadline.",
+      "answer_short": "ED & EA I: Nov 1; EA II: Dec 1; Regular Decision: Feb 1; Spring: Dec 1."
     },
     {
       "id": 2,
       "question": "What are the requirements to apply for graduate admission?",
       "chunk_id": "admissions.md-9-chunk-00009",
-      "answer": "Graduate admission requires a bachelor's degree from an accredited institution, admission through the Graduate School, and any program-specific materials (some programs require tests, portfolios, CV, recommendations).",
-      "answer_short": "Bachelor's degree plus Grad School and program requirements."
+      "answer": "Graduate applicants must hold a bachelor’s degree from an accredited institution and apply through the Graduate School. Programs may require additional materials such as GRE/GMAT scores, recommendations, portfolios, a CV, or supplemental documents. English-proficiency is required for international applicants.",
+      "answer_short": "Bachelor’s degree; Graduate School application; possible GRE/GMAT, recommendations, portfolio; English-proficiency for international students."
     },
     {
       "id": 3,
       "question": "What are the requirements to apply for transfer undergraduate admission?",
       "chunk_id": "admissions.md-6-chunk-00006",
-      "answer": "Good academic standing; HS diploma required; 2.0+ college GPA generally expected (programs may vary)",
-      "answer_short": "Good academic standing; HS diploma required; 2.0+ college GPA"
+      "answer": "Transfer applicants should be in good academic standing, have a high school diploma, and typically a college GPA of 2.0 or higher, though some programs may set higher standards. They may apply through the Common App (Transfer) or Miami’s own transfer application.",
+      "answer_short": "Good academic standing; HS diploma; ~2.0+ college GPA; apply via Common App Transfer or Miami Transfer Application."
     },
     {
       "id": 4,
       "question": "Do first-year applicants need recommendation letters?",
       "chunk_id": "admissions.md-3-chunk-00003",
-      "answer": "Yes. At least one counselor or academic teacher recommendation is required for first-year applicants.",
-      "answer_short": "Yes—at least one counselor or teacher recommendation."
+      "answer": "Yes, first-year applicants must submit at least one recommendation from a counselor or an academic teacher.",
+      "answer_short": "Yes—at least one counselor or teacher recommendation is required."
     },
     {
       "id": 5,
       "question": "What is the spring semester application deadline for undergraduates?",
       "chunk_id": "admissions.md-5-chunk-00005",
-      "answer": "The spring semester undergraduate application deadline is Dec. 1 (rolling decisions, deadline to accept Jan. 10).",
-      "answer_short": "Dec. 1."
+      "answer": "For undergraduate spring admission, Miami University sets a December 1 application deadline, and decisions are released on a rolling basis.",
+      "answer_short": "Spring undergraduate deadline: Dec 1."
     },
     {
       "id": 6,
       "question": "Is there a separate application for international undergraduate students?",
       "chunk_id": "admissions.md-8-chunk-00008",
-      "answer": "International undergraduates can apply via the Common Application and the Miami International Application (no essay).",
-      "answer_short": "Common App and Miami International Application."
+      "answer": "Yes. International undergraduate applicants can apply through the Common Application or through the Miami International Application, which does not require an essay.",
+      "answer_short": "Yes—Common App or Miami International Application (no essay)."
     },
     {
       "id": 7,
       "question": "What are the Early Decision and Early Action deadlines?",
       "chunk_id": "admissions.md-5-chunk-00005",
-      "answer": "Early Decision: apply by Nov. 1 (decision Dec. 1). Early Action I: apply by Nov. 1 (decision Dec. 15). Early Action II: apply by Dec. 1 (decision Feb. 1).",
-      "answer_short": "ED Nov 1; EA I Nov 1; EA II Dec 1."
+      "answer": "Early Decision and Early Action I both have a November 1 application deadline. Early Action II has a December 1 deadline.",
+      "answer_short": "ED & EA I: Nov 1; EA II: Dec 1."
     },
     {
       "id": 8,
       "question": "What application platforms can first-year students use?",
       "chunk_id": "admissions.md-3-chunk-00003",
-      "answer": "First-year students can apply via the Common Application and the Coalition Application (where available).",
-      "answer_short": "Common App or Coalition App."
+      "answer": "First-year students may apply through the Common Application or the Coalition Application, depending on availability.",
+      "answer_short": "Common Application; Coalition Application."
     },
     {
       "id": 9,
       "question": "Is Miami University test-optional for first-year applicants?",
       "chunk_id": "admissions.md-3-chunk-00003",
-      "answer": "Yes. ACT/SAT is optional for Oxford first-year applicants through Spring 2026; superscoring is considered if scores are submitted.",
-      "answer_short": "Yes—test-optional through Spring 2026 (superscore if submitted)."
+      "answer": "Yes. Miami University is ACT/SAT test-optional for first-year applicants applying to the Oxford campus through Spring 2026.",
+      "answer_short": "Yes—test-optional through Spring 2026."
     },
     {
       "id": 10,
       "question": "What materials do first-year applicants need to submit?",
       "chunk_id": "admissions.md-3-chunk-00003",
-      "answer": "Required/supporting materials: high school transcript (unofficial accepted at application), at least one counselor or academic teacher recommendation, and English proficiency for non-native English speakers.",
-      "answer_short": "Transcript, 1+ counselor/teacher recommendation, English proficiency if needed."
+      "answer": "First-year applicants must submit a high school transcript (unofficial accepted initially), at least one counselor or teacher recommendation, and proof of English proficiency if they are not native English speakers.",
+      "answer_short": "Transcript; counselor/teacher recommendation; English-proficiency if needed."
     }
   ]
 }

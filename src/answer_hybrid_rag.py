@@ -2,7 +2,7 @@
 answer_hybrid_rag.py
 
 Run hybrid retrieval (FAISS + BM25 + RRF), then generate an answer with citations
-using a Hugging Face text2text model (default: google/flan-t5-base).
+using a generator model (default: Google Gemini, e.g., gemini-2.5-flash-lite; requires GOOGLE_API_KEY).
 
 Example:
     python src/answer_hybrid_rag.py --index indexes/faiss_admissions --doc data/admissions.md --manifest indexes/faiss_admissions/chunk_manifest.json --q "When is the undergrad application deadline?" --k 4 --faiss_k 10 --bm25_k 10 --max_new_tokens 200
@@ -10,9 +10,11 @@ Example:
 
 import argparse
 import os
+import re
 from typing import List
 
-from transformers import pipeline
+from dotenv import load_dotenv
+from transformers import pipeline, AutoConfig, AutoTokenizer
 
 from query_hybrid_rrf import (
     load_faiss_hits,
@@ -24,7 +26,7 @@ from query_hybrid_rrf import (
 def build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Hybrid RAG answer generator with citations.")
     parser.add_argument("--index", required=True, help="Path to FAISS index directory")
-    parser.add_argument("--doc", required=True, help="Path to DOCX source used for BM25 retrieval")
+    parser.add_argument("--doc", required=True, help="Path to source file used for BM25 retrieval (md/docx)")
     parser.add_argument("--q", required=True, help="User question")
     parser.add_argument("--k", type=int, default=4, help="Number of fused chunks to pass to the generator")
     parser.add_argument("--faiss_k", type=int, default=10, help="FAISS hits to fetch before fusion")
@@ -34,55 +36,75 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--chunk_overlap", type=int, default=200, help="Chunk overlap for BM25 splitter (match ingest)")
     parser.add_argument("--embedding_model", default="sentence-transformers/all-MiniLM-L6-v2", help="Embedding model used for FAISS queries")
     parser.add_argument("--manifest", help="Optional chunk manifest JSON from ingestion (avoids re-splitting)")
-    parser.add_argument("--gen_model", default="google/flan-t5-base", help="HF text2text model id")
+    parser.add_argument("--gen_model", default="gemini-2.5-flash-lite", help="Generator model id (HF or gemini-*)")
     parser.add_argument("--max_new_tokens", type=int, default=200, help="Max tokens to generate")
     parser.add_argument("--num_beams", type=int, default=4, help="Beam search width to reduce repetition")
     return parser
 
 
 def load_generator(model_id: str, num_beams: int, max_new_tokens: int):
-    """Create a lightweight text2text pipeline. Defaults to CPU unless GPU is available."""
-    generator = pipeline(
-        "text2text-generation",
-        model=model_id,
-        truncation=True,
-    )
-    # wrap to inject params each call
+    """Create a generation pipeline. Uses Gemini if model_id starts with 'gemini', otherwise HF."""
+    # Load environment variables from .env if present.
+    load_dotenv()
+    if model_id.startswith("gemini"):
+        try:
+            import google.generativeai as genai
+        except ImportError:
+            raise ImportError("google-generativeai is required for gemini models. pip install google-generativeai")
+        api_key = os.getenv("GOOGLE_API_KEY")
+        if not api_key:
+            raise EnvironmentError("Set GOOGLE_API_KEY to use gemini models.")
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel(model_id)
+
+        def run(prompt: str):
+            resp = model.generate_content(prompt, generation_config={"max_output_tokens": max_new_tokens})
+            return resp.text or ""
+
+        return run
+
+    # HF path
+    cfg = AutoConfig.from_pretrained(model_id)
+    task = "text2text-generation" if cfg.is_encoder_decoder else "text-generation"
+    tok = AutoTokenizer.from_pretrained(model_id)
+    pad_id = tok.eos_token_id
+    pipeline_kwargs = {
+        "task": task,
+        "model": model_id,
+        "tokenizer": tok,
+        "truncation": True,
+        "pad_token_id": pad_id,
+    }
+    if task == "text-generation":
+        pipeline_kwargs["return_full_text"] = False
+    generator = pipeline(**pipeline_kwargs)
+
     def run(prompt: str):
-        return generator(
-            prompt,
-            max_new_tokens=max_new_tokens,
-            num_beams=num_beams,
-            no_repeat_ngram_size=4,
-            repetition_penalty=1.2,
-        )[0]["generated_text"]
+        gen_kwargs = {
+            "max_new_tokens": max_new_tokens,
+            "no_repeat_ngram_size": 4,
+            "repetition_penalty": 1.2,
+            "num_beams": num_beams if task == "text2text-generation" else None,
+        }
+        # Remove None to avoid warnings
+        gen_kwargs = {k: v for k, v in gen_kwargs.items() if v is not None}
+        out = generator(prompt, **gen_kwargs)[0]
+        return out.get("generated_text") or out.get("text") or ""
+
     return run
 
 
 def build_prompt(question: str, contexts: List[str], chunk_ids: List[str]) -> str:
     context_block = "\n\n".join([f"[{cid}] {text}" for cid, text in zip(chunk_ids, contexts)])
     return (
-        "You are an admissions assistant. Answer in one short, direct sentence using ONLY the provided context. "
-        "Cite chunk ids inline in brackets (e.g., [admissions.md-0-chunk-00002]). "
-        "Do not list tables verbatim. If the answer is not in the context, say you do not have that information.\n\n"
+        "You are an conversational assistant. Answer in clear, conversational sentence that restates the subject and the answer (e.g., 'The undergraduate application deadline is Dec. 1.'). "
+        "Use your own words, keep it natural, and avoid copying tables or lists. Return ONLY the sentence. "
+        "Cite chunk ids inline in brackets at the very end of your answer (e.g., [admissions.md-0-chunk-00002]). "
+        "If the answer is not in the context, you must say you do not have that information.\n\n"
         f"Question: {question}\n\n"
         f"Context:\n{context_block}\n\n"
         "Answer:"
     )
-
-
-def _ensure_citation(answer: str, chunk_ids: List[str]) -> str:
-    """If the model forgot to cite, append the top chunk id as a minimal citation."""
-    for cid in chunk_ids:
-        if cid and cid in answer:
-            return answer
-    if not chunk_ids:
-        return answer
-    suffix = f" [{chunk_ids[0]}]"
-    if answer.endswith((".", "!", "?")):
-        return answer + suffix
-    return answer + suffix
-
 
 def main():
     parser = build_arg_parser()
@@ -110,8 +132,6 @@ def main():
     raw_answer = generate(prompt)
     # Strip any accidental "Sources" echoes from the model output.
     answer = raw_answer.split("Sources:")[0].strip()
-
-    answer = _ensure_citation(answer, chunk_ids)
 
     print("\n=== Hybrid RAG Answer ===")
     print(answer.strip())

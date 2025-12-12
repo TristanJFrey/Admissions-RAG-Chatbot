@@ -1,0 +1,25 @@
+{
+  "tests": [
+    {
+      "id": 1,
+      "question": "When is the deadline for first years applicants at Miami University?",
+      "chunk_id": "admissions.md-5-chunk-00005",
+      "answer": "For first-year applicants, Miami University uses several deadlines depending on the application type. Early Decision and Early Action I have a November 1 deadline, Early Action II is due December 1, and Regular Decision applications are due February 1. Spring admission also has a December 1 deadline.",
+      "answer_short": "ED & EA I: Nov 1; EA II: Dec 1; Regular Decision: Feb 1; Spring: Dec 1."
+    },
+    {
+      "id": 2,
+      "question": "What are the requirements to apply for graduate admission?",
+      "chunk_id": "admissions.md-9-chunk-00009",
+      "answer": "Graduate applicants must hold a bachelor’s degree from an accredited institution and apply through the Graduate School. Programs may require additional materials such as GRE/GMAT scores, recommendations, portfolios, a CV, or supplemental documents. English-proficiency is required for international applicants.",
+      "answer_short": "Bachelor’s degree; Graduate School application; possible GRE/GMAT, recommendations, portfolio; English-proficiency for international students."
+    },
+    {
+      "id": 3,
+      "question": "What are the requirements to apply for transfer undergraduate admission?",
+      "chunk_id": "admissions.md-6-chunk-00006",
+      "answer": "Transfer applicants should be in good academic standing, have a high school diploma, and typically a college GPA of 2.0 or higher, though some programs may set higher standards. They may apply through the Common App (Transfer) or Miami’s own transfer application.",
+      "answer_short": "Good academic standing; HS diploma; ~2.0+ college GPA; apply via Common App Transfer or Miami Transfer Application."
+    }
+  ]
+}

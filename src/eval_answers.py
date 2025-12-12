@@ -23,7 +23,7 @@ from typing import Dict, List, Tuple
 
 from bert_score import score as bert_score
 
-from answer_hybrid_rag import build_prompt, load_generator, _ensure_citation
+from answer_hybrid_rag import build_prompt, load_generator
 from query_hybrid_rrf import (
     load_faiss_hits,
     load_bm25_hits,
@@ -44,7 +44,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--chunk_size", type=int, default=1200, help="Chunk size for BM25 splitter (match ingest)")
     parser.add_argument("--chunk_overlap", type=int, default=200, help="Chunk overlap for BM25 splitter (match ingest)")
     parser.add_argument("--embedding_model", default="sentence-transformers/all-MiniLM-L6-v2", help="Embedding model used for FAISS queries")
-    parser.add_argument("--gen_model", default="google/flan-t5-base", help="HF text2text model id")
+    parser.add_argument("--gen_model", default="gemini-2.5-flash-lite", help="Generator model id (HF or gemini-*)")
     parser.add_argument("--max_new_tokens", type=int, default=128, help="Max tokens to generate")
     parser.add_argument("--num_beams", type=int, default=4, help="Beam search width to reduce repetition")
     parser.add_argument("--report_details", action="store_true", help="Print per-question scores and hallucination flags")
@@ -119,7 +119,6 @@ def run_generation(
     prompt = build_prompt(question, contexts, chunk_ids)
     raw_answer = generator(prompt)
     answer = raw_answer.split("Sources:")[0].strip()
-    answer = _ensure_citation(answer, chunk_ids)
     return answer, contexts, chunk_ids
 
 
