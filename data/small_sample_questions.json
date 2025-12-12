@@ -1,25 +1,39 @@
 {
   "tests": [
     {
-      "id": 1,
-      "question": "When is the deadline for first years applicants at Miami University?",
-      "chunk_id": "admissions.md-5-chunk-00005",
-      "answer": "For first-year applicants, Miami University uses several deadlines depending on the application type. Early Decision and Early Action I have a November 1 deadline, Early Action II is due December 1, and Regular Decision applications are due February 1. Spring admission also has a December 1 deadline.",
-      "answer_short": "ED & EA I: Nov 1; EA II: Dec 1; Regular Decision: Feb 1; Spring: Dec 1."
+      "id": 11,
+      "question": "What is the merit scholarship amount for a high school student with a 3.82 GPA and is an Ohio resident?",
+      "chunk_id": "admissions.md-15-chunk-00015",
+      "answer": "A high school student with a weighted GPA of 3.82 who is an Ohio resident falls within the 3.75–3.94 GPA range and is eligible for a merit scholarship starting at $4,000 per year.",
+      "answer_short": "$4,000 per year (starting amount)."
     },
     {
-      "id": 2,
-      "question": "What are the requirements to apply for graduate admission?",
-      "chunk_id": "admissions.md-9-chunk-00009",
-      "answer": "Graduate applicants must hold a bachelor’s degree from an accredited institution and apply through the Graduate School. Programs may require additional materials such as GRE/GMAT scores, recommendations, portfolios, a CV, or supplemental documents. English-proficiency is required for international applicants.",
-      "answer_short": "Bachelor’s degree; Graduate School application; possible GRE/GMAT, recommendations, portfolio; English-proficiency for international students."
+      "id": 12,
+      "question": "When is the priority application deadline for Miami's merit scholarships?",
+      "chunk_id": "admissions.md-14-chunk-00014",
+      "answer": "The priority application deadline for most of Miami University’s merit scholarships is December 1.",
+      "answer_short": "December 1."
     },
     {
-      "id": 3,
-      "question": "What are the requirements to apply for transfer undergraduate admission?",
-      "chunk_id": "admissions.md-6-chunk-00006",
-      "answer": "Transfer applicants should be in good academic standing, have a high school diploma, and typically a college GPA of 2.0 or higher, though some programs may set higher standards. They may apply through the Common App (Transfer) or Miami’s own transfer application.",
-      "answer_short": "Good academic standing; HS diploma; ~2.0+ college GPA; apply via Common App Transfer or Miami Transfer Application."
+      "id": 13,
+      "question": "Who is eligible for the Partner Community College Scholarship?",
+      "chunk_id": "admissions.md-24-chunk-00024",
+      "answer": "Eligible students must be incoming transfer students who attended a Miami University partner community college full-time immediately before enrolling at Miami and who transfer directly from that institution.",
+      "answer_short": "Incoming transfer students from partner community colleges who enrolled full-time immediately before transferring."
+    },
+    {
+      "id": 14,
+      "question": "How is the Phi Theta Kappa Scholarship renewed?",
+      "chunk_id": "admissions.md-23-chunk-00023",
+      "answer": "The Phi Theta Kappa Scholarship is renewed by maintaining full-time enrollment on the Oxford campus and a minimum cumulative GPA of 3.0.",
+      "answer_short": "Maintain full-time enrollment and a 3.0 cumulative GPA."
+    },
+    {
+      "id": 15,
+      "question": "How do I apply for the International Education Scholarship?",
+      "chunk_id": "admissions.md-27-chunk-00027",
+      "answer": "There is no separate application for the International Education Scholarship. All new first-year international undergraduate students who submit a complete admission application and meet requirements are automatically considered, with priority given to those who apply by December 1.",
+      "answer_short": "No separate application—automatic consideration for eligible international first-year students; priority by Dec 1."
     }
   ]
 }

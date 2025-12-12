@@ -41,10 +41,10 @@ python src/eval_answers.py --index indexes/faiss_admissions --doc data/admission
 
 # HF/Flan variants (matching above k values)
 # k-1 flan
-python src/eval_answers.py --index indexes/faiss_admissions --doc data/admissions.md --manifest indexes/faiss_admissions/chunk_manifest.json --questions data/small_sample_questions.json --k 1 --faiss_k 3 --bm25_k 3 --max_new_tokens 64 --gen_model google/flan-t5-base --report_details --report_answers --out evaluation/eval_report_k1_flan.txt
+python src/eval_answers.py --index indexes/faiss_admissions --doc data/admissions.md --manifest indexes/faiss_admissions/chunk_manifest.json --questions data/sample_questions.json --k 1 --faiss_k 3 --bm25_k 3 --max_new_tokens 64 --gen_model google/flan-t5-base --report_details --report_answers --out evaluation/eval_report_k1_flan.txt
 
 # k-2 flan
-python src/eval_answers.py --index indexes/faiss_admissions --doc data/admissions.md --manifest indexes/faiss_admissions/chunk_manifest.json --questions data/small_sample_questions.json --k 2 --faiss_k 3 --bm25_k 3 --max_new_tokens 64 --gen_model google/flan-t5-base --report_details --report_answers --out evaluation/eval_report_k2_flan.txt
+python src/eval_answers.py --index indexes/faiss_admissions --doc data/admissions.md --manifest indexes/faiss_admissions/chunk_manifest.json --questions data/sample_questions.json --k 2 --faiss_k 3 --bm25_k 3 --max_new_tokens 64 --gen_model google/flan-t5-base --report_details --report_answers --out evaluation/eval_report_k2_flan.txt
 
 # k-3 flan
-python src/eval_answers.py --index indexes/faiss_admissions --doc data/admissions.md --manifest indexes/faiss_admissions/chunk_manifest.json --questions data/small_sample_questions.json --k 3 --faiss_k 3 --bm25_k 3 --max_new_tokens 64 --gen_model google/flan-t5-base --report_details --report_answers --out evaluation/eval_report_k3_flan.txt
+python src/eval_answers.py --index indexes/faiss_admissions --doc data/admissions.md --manifest indexes/faiss_admissions/chunk_manifest.json --questions data/sample_questions.json --k 3 --faiss_k 3 --bm25_k 3 --max_new_tokens 64 --gen_model google/flan-t5-base --report_details --report_answers --out evaluation/eval_report_k3_flan.txt
